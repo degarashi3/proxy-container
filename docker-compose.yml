@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  privoxy:
+    build: 
+      context: ./privoxy
+      dockerfile: Dockerfile
+    container_name: privoxy
+    ports:
+      - "8118:8118"
+    volumes:
+      - ./privoxy/config:/etc/privoxy/config
+    environment:
+      - TZ=Asia/Tokyo
+    networks:
+      - proxy_network
+    restart: always
+  squid:
+    image: ubuntu/squid:latest
+    container_name: squid
+    volumes:
+      - ./squid/squid.conf:/etc/squid/squid.conf
+    ports:
+      - "9999:3128"
+    environment:
+      - TZ=Asia/Tokyo
+    networks:
+      - proxy_network
+    restart: always
+
+networks:
+  proxy_network:
+
+
